@@ -1,0 +1,42 @@
+<div th:fragment = "navbar">
+
+<nav class="flex flex-row p-5 gap-10 items-center border-b-4">
+    <logo class="logo">
+        <img th:src="@{../images/logoSpiderBlack.svg}" alt="logo" width="150"/>
+    </logo>
+    <ul class="flex flex-row gap-5">
+        <li><a class="cool-link" href='/events'>Home</a></li>
+        <li><a class="cool-link" href='/events/create'>Nuevo evento</a></li>
+    </ul>
+    <div class="flex flex-row gap-5">
+        <div class="mb-3">
+            <div class="flex gap-3 w-full flex-wrap items-stretch">
+                <input
+                        type="search"
+                        class="relative flex m-0  block min-w-0 flex-auto rounded-[25px] border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-gray-300 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-grey-300 dark:focus:border-primary"
+                        placeholder="Search"
+                        aria-label="Search"
+                        aria-describedby="button-addon1" />
+
+                <!--Search button-->
+                <button
+                        class="flex items-center justify-center"
+                        type="button"
+                        id="button-addon1"
+                >
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="h-5 w-5">
+                        <path
+                                fill-rule="evenodd"
+                                d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                                clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+</div>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                clifford: '#da373d',
+                  greentitles: ' #28666e'
+              }
+            }
+          }
+        }
+    </script>
+    <link th:href="@{../styles/details.css}" rel="stylesheet"/>
+    <link th:href="@{../styles/common.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="flex items-center justify-center">
+
+    <article class="relative m-20 p-10 pt-20 flex flex-col w-[80%] h-full border border-2 rounded bg-grey-300">
+       <div class="absolute w-14 h-14 top-[-10px] left-[-10px] bg-greentitles"></div>
+        <div class="absolute w-8 h-10 bottom-0 right-0 bg-gray-400"></div>
+        <div class="absolute w-5 h-20 bottom-[-10px] right-[-5px] bg-greentitles"></div>
+
+        <div id="titleContainer" class="w-[50%] h-[100px]">
+            <h1 id="title" class="w-full font-semibold" style="word-break: break-all; word-wrap: break-word;"></h1>
+        </div>
+        <div class="grid grid-cols-5 gap-8">
+            <div class="col-span-2">
+                <p  th:text="${event.description}" class="text-justify lg:text-[1.7rem]"> </p>
+            </div>
+            <div class="col-span-3">
+                <img th:src="@{'/images/'+${event.imageFileName}}"
+                     width=""/>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-8 mt-8">
+            <div class=" flex flex-row items-center justify-center gap-10">
+                <img src="https://www.svgrepo.com/show/35457/calendar-symbol.svg" width="50px"/>
+                <div class="flex gap-3 justify-center items-center">
+                <div class="flex flex-col gap-2 justify-center items-center">
+                    <p class="text-[1.8rem] " th:text="${dayStart}"></p>
+                    <p class="text-[1.3rem] " th:text="${monthStart}"></p>
+                    <span class="bg-black w-[50px] h-[3px] rounded"></span>
+                </div>
+               <p class="text-[1.3rem] font-semibold">~</p>
+                <div class="flex flex-col gap-2 justify-center items-center">
+                    <p class="text-[1.8rem]  date" th:text="${dayEnd}"></p>
+                    <p class="text-[1.3rem]  date" th:text="${monthEnd}"></p>
+                    <span class="bg-black w-[50px] h-[3px] rounded"></span>
+                </div>
+                </div>
+            </div>
+            <div class="flex flex-row items-center justify-center gap-5">
+                <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" width="50px"/>
+                <div class="flex flex-col">
+                    <p class="text-[1.3rem]  date" th:text="${event.city}"></p>
+                </div>
+                <p class="text-[1.3rem] font-semibold">/</p>
+                <div class="flex flex-col">
+                   <p class="text-[1.3rem]  date" th:text="${event.department}"></p>
+                </div>
+            </div>
+            <div class=" flex items-center justify-center  gap-5">
+            <img src="https://www.svgrepo.com/show/488339/price-tag-rotate.svg"  width="50px" />
+            <p class="text-[2rem]  date" th:text="${event.price}"></p>
+            </div>
+        </div>
+
+    </article>
+</div>
+
+<!--<img th:src="@{'/images/'+${event.imageFileName}}" />-->
+<!--<h2 th:text="${event.title}"></h2>-->
+<!--<p th:text="${event.description}" ></p>-->
+<!--<p th:text="${event.city}"></p>-->
+<!--<p th:text="${event.department}"></p>-->
+<!--<p th:text="${monthStart}"></p>-->
+<!--<p th:text="${dayStart}"></p>-->
+<!--<p th:text="${monthEnd}"></p>-->
+<!--<p th:text="${dayEnd}"></p>-->
+<!--<p th:text="${event.endDate}"></p>-->
+<!--<p th:text="${event.startDate}"></p>-->
+<!--<p th:text="${event.price}"></p>-->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+<script  th:inline="javascript">
+    /*<![CDATA[*/
+    var inputText = /*[[${event.title}]]*/ '';
+     const output = document.getElementById("title");
+     const outputContainer = document.getElementById("titleContainer");
+
+     function resize_to_fit() {
+   let fontSize = window.getComputedStyle(output).fontSize;
+   output.style.fontSize = (parseFloat(fontSize) - 1) + 'px';
+
+   if(output.clientHeight >= outputContainer.clientHeight){
+     resize_to_fit();
+   }
+ }
+
+ function processInput() {
+   output.innerHTML = inputText;
+   output.style.fontSize = '150px'; // Default font size
+   resize_to_fit();
+ }
+
+     processInput();
+     /*]]>*/
+</script>
+</html>
