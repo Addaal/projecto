@@ -28,7 +28,19 @@
     <article class="relative m-20 p-10 pt-20 flex flex-col w-[80%] h-full border border-2 rounded bg-grey-300">
        <div class="absolute w-14 h-14 top-[-10px] left-[-10px] bg-greentitles"></div>
         <div class="absolute w-8 h-10 bottom-0 right-0 bg-gray-400"></div>
-        <div class="absolute w-5 h-20 bottom-[-10px] right-[-5px] bg-greentitles"></div>
+        <div class="absolute w-5 h-20 bottom-[-10px] right-[-5px] bg-greentitles"> </div>
+        <!--            editar y eliminar-->
+
+        <a  th:href="@{/events/edit(id=${event.id})}">
+        <div class="absolute w-14 h-14 top-0 right-0 p-5 hover:bg-yellow-300 hover:cursor-pointer">
+                <img th:src="@{../images/edit.svg}" alt="logo" width="50"/>
+        </div>
+        </a>
+        <a  th:href="@{/events/delete(id=${event.id})}" onclick="return confirm('Estas seguro?')">
+        <div class="absolute w-14 h-14 top-14 right-0 p-5 hover:bg-red-300 hover:cursor-pointer">
+            <img th:src="@{../images/basurero.svg}" alt="logo" width="55" />
+        </div>
+        </a>
 
         <div id="titleContainer" class="w-[50%] h-[100px]">
             <h1 id="title" class="w-full font-semibold" style="word-break: break-all; word-wrap: break-word;"></h1>
@@ -76,7 +88,7 @@
             </div>
             <div class=" flex items-center justify-center  gap-5">
             <img src="https://www.svgrepo.com/show/488339/price-tag-rotate.svg"  width="50px" />
-            <p class="text-[2rem]  date" th:text="${event.price}"></p>
+            <p class="text-[2rem]  date" th:text="'Gs. '+${event.price}"></p>
             </div>
         </div>
 
@@ -87,18 +99,6 @@
 
 </div>
 
-<!--<img th:src="@{'/images/'+${event.imageFileName}}" />-->
-<!--<h2 th:text="${event.title}"></h2>-->
-<!--<p th:text="${event.description}" ></p>-->
-<!--<p th:text="${event.city}"></p>-->
-<!--<p th:text="${event.department}"></p>-->
-<!--<p th:text="${monthStart}"></p>-->
-<!--<p th:text="${dayStart}"></p>-->
-<!--<p th:text="${monthEnd}"></p>-->
-<!--<p th:text="${dayEnd}"></p>-->
-<!--<p th:text="${event.endDate}"></p>-->
-<!--<p th:text="${event.startDate}"></p>-->
-<!--<p th:text="${event.price}"></p>-->
 <div th:replace="~{fragments/footer.html :: footer}"></div>
 </body>
 

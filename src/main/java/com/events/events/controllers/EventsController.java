@@ -191,6 +191,136 @@ public class EventsController {
         }
         return monthName;
     }
+
+    @GetMapping("/edit")
+    public String showEditPage(
+            Model model,
+            @RequestParam Long id
+    ) {
+        try{
+            Events event = repo.findById(id).get();
+            model.addAttribute("event", event);
+
+            EventDto eventDto = new EventDto();
+            eventDto.setTitle(event.getTitle());
+            eventDto.setDescription(event.getDescription());
+            eventDto.setCity(event.getCity());
+            eventDto.setDepartment(event.getDepartment());
+            eventDto.setPrice(event.getPrice());
+            eventDto.setStartDate(event.getStartDate());
+            eventDto.setEndDate(event.getEndDate());
+            model.addAttribute("eventDto", eventDto);
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return "redirect:/events";
+        }
+        return "events/editEvent";
+    }
+
+    @PostMapping("/edit")
+    public String updateEvent(
+            Model model,
+            @RequestParam Long id,
+            @Valid @ModelAttribute EventDto eventDto,
+            BindingResult result
+
+            ){
+        try{
+            Events event = repo.findById(id).get();
+            model.addAttribute("event", event);
+
+            if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
+                result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
+            } else if (eventDto.getImageFiles().size() > 5) {
+                result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
+            }
+            if (result.hasErrors()) {
+                return "events/createEvent";
+            }
+            //delete old pictures
+            List<EventImage> oldImages = event.getImages();
+            System.out.println(oldImages.size());
+
+            for (EventImage image : oldImages) {
+                // Delete the image file from the file system
+                String filePath = "public/images/" + image.getImageFileName();
+                Files.deleteIfExists(Paths.get(filePath));
+                image.setEvent(null);
+            }
+            event.getImages().clear();
+            //save new pictures
+            List<EventImage> newImages = new ArrayList<>();
+            Date createdAt = new Date();
+            for (MultipartFile file : eventDto.getImageFiles()) {
+                if (!file.isEmpty()) {
+                    try {
+                        String uploadDir = "public/images/";
+                        String storageFileName = createdAt.getTime() + "-" + file.getOriginalFilename();
+                        Path uploadPath = Paths.get(uploadDir);
+
+                        if (!Files.exists(uploadPath)) {
+                            Files.createDirectories(uploadPath);
+                        }
+
+                        try (InputStream inputStream = file.getInputStream()) {
+                            Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
+                        }
+
+                        EventImage eventImage = new EventImage();
+                        eventImage.setEvent(event);
+                        eventImage.setImageFileName(storageFileName);
+                        newImages.add(eventImage);
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        // Handle exception
+                    }
+                }
+            }
+
+            event.setTitle(eventDto.getTitle());
+            event.setDescription(eventDto.getDescription());
+            event.setCity(eventDto.getCity());
+            event.setDepartment(eventDto.getDepartment());
+            event.setPrice(eventDto.getPrice());
+            event.setStartDate(eventDto.getStartDate());
+            event.setEndDate(eventDto.getEndDate());
+            event.setImages(newImages);
+            repo.save(event);
+
+        }catch (Exception e ){
+            System.out.println(e.getMessage());
+            return "redirect:/events";
+        }
+        return "redirect:/events";
+    }
+
+    @GetMapping("/delete")
+    public String deleteEvent(
+
+            @RequestParam Long id
+    ) {
+        try {
+        Events event = repo.findById(id).get();
+
+        // Delete the image file from the file system
+            List<EventImage> oldImages = event.getImages();
+            System.out.println(oldImages.size());
+
+            for (EventImage image : oldImages) {
+                String filePath = "public/images/" + image.getImageFileName();
+                Files.deleteIfExists(Paths.get(filePath));
+                image.setEvent(null);
+            }
+
+            repo.delete(event);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    return "redirect:/events";
+    }
+
 }
 
 
