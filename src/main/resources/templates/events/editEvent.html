@@ -1,0 +1,230 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                clifford: '#da373d',
+                    greentitles: ' #28666e'
+              }
+            }
+          }
+        }
+    </script>
+    <link th:href="@{../styles/common.css}" rel="stylesheet"/>
+
+
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="flex flex-col items-center py-5 gap-2 justify-center  w-full ">
+    <h1 class="flex block uppercase text-lg text-gray-700  font-bold mb-2 ">Editar Evento</h1>
+    <form class="flex flex-col w-full max-w-[80%]" method="post" enctype="multipart/form-data" th:object="${eventDto}">
+
+
+        <div class="flex flex-wrap  mb-6">
+            <div class="w-full  px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                    ID
+                </label>
+                <input readonly th:value=${event.id} class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Mi gran evento">
+            </div>
+        </div>
+
+        <div class="flex flex-wrap  mb-6">
+            <div class="w-full  px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                    Titulo
+                </label>
+                <input th:field=${eventDto.title} class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"  type="text" placeholder="Mi gran evento">
+                <p th:if="${#fields.hasErrors('title')}" class="text-red-500 text-xs italic" th:errors="${eventDto.title}"></p>
+            </div>
+        </div>
+        <div class="flex flex-wrap  mb-6">
+            <div class="w-full  px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                    Descripcion
+                </label>
+                <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                          id="w3review"
+                          name="w3review"
+                          rows="10"
+                          placeholder="Describenos tu evento. . ."
+                          th:field=${eventDto.description}
+                ></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="${eventDto.description}" class="text-red-500 text-xs italic"></p>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mb-6">
+
+
+            <div class="flex flex-wrap mb-2">
+
+                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                        Ciudad
+                    </label>
+                    <input  th:field=${eventDto.city} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Asuncion">
+                    <p th:if="${#fields.hasErrors('city')}" th:errors="${eventDto.city}" class="text-red-500 text-xs italic"></p>
+
+                </div>
+
+                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                        Departamento
+                    </label>
+                    <div class="relative">
+                        <select th:field=${eventDto.department} value="Concepcion" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                            <option value="Concepción">Concepción</option>
+                            <option value="San Pedro">San Pedro</option>
+                            <option value="Cordillera">Cordillera</option>
+                            <option value="Guairá">Guairá</option>
+                            <option value="Caaguazú">Caaguazú</option>
+                            <option value="Caazapá">Caazapá</option>
+                            <option value="Itapúa">Itapúa</option>
+                            <option value="Misiones">Misiones</option>
+                            <option value="Paraguarí">Paraguarí</option>
+                            <option value="Alto Paraná">Alto Paraná</option>
+                            <option value="Central">Central</option>
+                            <option value="Ñeembucú">Ñeembucú</option>
+                            <option value="Amambay">Amambay</option>
+                            <option value="Canindeyú">Canindeyú</option>
+                            <option value="Presidente Hayes">Presidente Hayes</option>
+                            <option value="Boquerón">Boquerón</option>
+                            <option value="Alto Paraguay">Alto Paraguay</option>
+                            <option value="Asunción">Asunción</option>
+
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                    <p th:if="${#fields.hasErrors('department')}" th:errors="${eventDto.department}" class="text-red-500 text-xs italic"></p>
+
+                </div>
+
+                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priceId">
+                        Precio
+                    </label>
+                    <input th:field=${eventDto.price} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priceId" type="number" value="0" placeholder="Precio">
+                </div>
+
+
+            </div>
+
+            <div class="flex flex-wrap mb-2">
+
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="startDate">
+                        Fecha de Inicio
+                    </label>
+                    <input th:field=${eventDto.startDate} class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="startDate" type="date"  pattern="\d{2}-\d{2}-\d{4}" name="startDate">
+                    <p th:if="${#fields.hasErrors('startDate')}" th:errors="${eventDto.startDate}" class="text-red-500 text-xs italic"></p>
+
+                </div>
+
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="endDate">
+                        Fecha de Finalizacion
+                    </label>
+                    <input  th:field=${eventDto.endDate} class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="endDate" type="date" pattern="\d{2}-\d{2}-\d{4}" name="endDate" >
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!imagen previamente NO ELIMINAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+        <!--        <div class="flex flex-col px-3 gap-2 mb-6">-->
+        <!--            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priceId">-->
+        <!--                Subir imagen-->
+        <!--            </label>-->
+
+
+
+        <!--            <input th:field=${eventDto.imageFileName} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" aria-describedby="file_input_help" id="file_input" type="file">-->
+        <!--            <p th:if="${#fields.hasErrors('imageFileName')}" th:errors="${eventDto.imageFileName}" class="text-red-500 text-xs italic"></p>-->
+        <!--        </div>-->
+
+
+        <div class="flex flex-col px-3 gap-2 mb-6">
+            <div class="upload__box">
+                <div class="upload__btn-box mb-4">
+                    <label for="upload" class="upload__btn inline-block font-semibold text-white bg-gray-700 border-2 border-gray-700 rounded-md px-4 py-2 transition-all duration-300 cursor-pointer hover:bg-transparent hover:text-gray-700">Subir imagenes</label>
+                    <input th:field=${eventDto.imageFiles} id="upload" type="file" multiple class="upload__inputfile hidden">
+                </div>
+                <div class="upload__img-wrap flex flex-wrap -mx-4"></div>
+            </div>
+            <p th:if="${#fields.hasErrors('imageFiles')}" th:errors="${eventDto.imageFiles}" class="text-red-500 text-xs italic"></p>
+
+        </div>
+
+
+        <!--        submit button-->
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+            <button type="submit" class="rounded-md bg-greentitles px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+<script>
+    $(document).ready(function () {
+    ImgUpload();
+  });
+
+  function ImgUpload() {
+    var imgWrap = $(".upload__img-wrap");
+    var imgArray = [];
+
+    $('#upload').on('change', function (e) {
+      var maxLength = $(this).data('max_length');
+      var files = e.target.files;
+
+      $.each(files, function (index, f) {
+        if (!f.type.match('image.*')) {
+          return;
+        }
+
+        if (imgArray.length >= maxLength) {
+          return false;
+        } else {
+          imgArray.push(f);
+
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var html = "<div class='upload__img-box w-48 h-48 bg-cover bg-center bg-no-repeat relative mr-4 mb-4' style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "'><div class='upload__img-close w-6 h-6 bg-white bg-opacity-50 rounded-full flex items-center justify-center absolute top-2 right-2 cursor-pointer'>×</div></div>";
+            imgWrap.append(html);
+          }
+          reader.readAsDataURL(f);
+        }
+      });
+    });
+
+    $('body').on('click', ".upload__img-close", function () {
+      var file = $(this).parent().data("file");
+      imgArray = imgArray.filter(function (item) {
+        return item.name !== file;
+      });
+      $(this).parent().remove();
+    });
+  }
+
+</script>
+</html>
