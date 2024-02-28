@@ -8,14 +8,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 public class EventDto {
-    @Size(min = 3, message = "minimo caracteres: 3")
-    @Size(max = 50, message = "Maximo caracteres: 50")
+    @Size(min = 3, message = "Minimum characters: 3")
+    @Size(max = 50, message = "Maximum characters: 50")
     private String title;
 
-    @Size(min = 10, message = "minimo caracteres: 10")
-    @Size(max =  1000, message = "Maximo caracteres: 1000")
+    @Size(min = 10, message = "Minimum characters: 10")
+    @Size(max =  1000, message = "Maximum characters: 1000")
     private String description;
 
     @NotEmpty(message = "City required")
@@ -33,17 +34,8 @@ public class EventDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd") // Specify the date format here
     private Date endDate;
-    //
-    private MultipartFile imageFileName;
-//
-//    @NotEmpty(message = "Event maker name required")
-//    private String eventMakerName;
-//
-//    @NotEmpty(message = "Event maker phone required")
-//    private String eventMakerPhone;
-//
-//    @NotEmpty(message = "Event maker email required")
-//    private String eventMakerEmail;
+
+    private List<MultipartFile> imageFiles;
 
     // Constructors
     public EventDto() {
@@ -105,36 +97,12 @@ public class EventDto {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-    //
-    public MultipartFile getImageFileName() {
-        return imageFileName;
+
+    public List<MultipartFile> getImageFiles() {
+        return imageFiles;
     }
-    //
-    public void setImageFileName(MultipartFile imageFileName) {
-        this.imageFileName = imageFileName;
+
+    public void setImageFiles(List<MultipartFile> imageFiles) {
+        this.imageFiles = imageFiles;
     }
-//
-//    public String getEventMakerName() {
-//        return eventMakerName;
-//    }
-//
-//    public void setEventMakerName(String eventMakerName) {
-//        this.eventMakerName = eventMakerName;
-//    }
-//
-//    public String getEventMakerPhone() {
-//        return eventMakerPhone;
-//    }
-//
-//    public void setEventMakerPhone(String eventMakerPhone) {
-//        this.eventMakerPhone = eventMakerPhone;
-//    }
-//
-//    public String getEventMakerEmail() {
-//        return eventMakerEmail;
-//    }
-//
-//    public void setEventMakerEmail(String eventMakerEmail) {
-//        this.eventMakerEmail = eventMakerEmail;
-//    }
 }

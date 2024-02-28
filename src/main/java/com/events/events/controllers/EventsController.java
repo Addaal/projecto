@@ -1,7 +1,9 @@
 package com.events.events.controllers;
 
 import com.events.events.models.EventDto;
+import com.events.events.models.EventImage;
 import com.events.events.models.Events;
+import com.events.events.repositories.EventImageRepo;
 import com.events.events.repositories.EventsRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +31,8 @@ import java.util.List;
 public class EventsController {
     @Autowired
     private EventsRepo repo;
+    @Autowired
+    private EventImageRepo eventImageRepo;
 
     @GetMapping({"", "/"})
     public String showEventsList (Model model) {
@@ -43,40 +48,23 @@ public class EventsController {
         return "events/createEvent";
     }
 
-    @PostMapping("/create")
-    public String createEvent (
-            @Valid @ModelAttribute EventDto eventDto,
-            BindingResult result)
-    {
 
-        if(eventDto.getImageFileName().isEmpty()){
-            result.addError(new FieldError( "eventDto","imageFileName", "Missing Image"));
+
+    @PostMapping("/create")
+    public String createEvent(
+            @Valid @ModelAttribute EventDto eventDto,
+            BindingResult result) {
+
+        if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
+            result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
+        } else if (eventDto.getImageFiles().size() > 5) {
+            result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
         }
 
-        if(result.hasErrors()){
+
+        if (result.hasErrors()) {
             return "events/createEvent";
         }
-
-        MultipartFile image = eventDto.getImageFileName();
-        Date createdAt = new Date();
-        String storageFileName = createdAt.getTime() + "-" + image.getOriginalFilename();
-
-        try{
-            String uploadDir = "public/images/";
-            Path uploadPath = Paths.get(uploadDir);
-
-            if(!Files.exists(uploadPath)){
-                Files.createDirectories(uploadPath);
-            }
-            try(InputStream inputStream = image.getInputStream()){
-                Files.copy(inputStream, Paths.get(uploadDir+storageFileName), StandardCopyOption.REPLACE_EXISTING);
-
-            }
-        }catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-
 
         Events event = new Events();
         event.setTitle(eventDto.getTitle());
@@ -86,13 +74,45 @@ public class EventsController {
         event.setPrice(eventDto.getPrice());
         event.setStartDate(eventDto.getStartDate());
         event.setEndDate(eventDto.getEndDate());
-        event.setImageFileName(storageFileName);
-        repo.save(event);
+
+        List<EventImage> images = new ArrayList<>();
+        Date createdAt = new Date();
+        for (MultipartFile file : eventDto.getImageFiles()) {
+            if (!file.isEmpty()) {
+                try {
+                    String uploadDir = "public/images/";
+                    String storageFileName = createdAt.getTime() + "-" + file.getOriginalFilename();
+                    Path uploadPath = Paths.get(uploadDir);
+
+                    if (!Files.exists(uploadPath)) {
+                        Files.createDirectories(uploadPath);
+                    }
+
+                    try (InputStream inputStream = file.getInputStream()) {
+                        Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    System.out.println("here");
+                    System.out.println(storageFileName);
+
+                    EventImage eventImage = new EventImage();
+                    eventImage.setEvent(event);
+                    eventImage.setImageFileName(storageFileName);
+                    images.add(eventImage);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    // Handle exception
+                }
+            }
+        }
+
+        event.setImages(images); // Set the list of images to the event
+        Events savedEvent = repo.save(event);
 
         return "redirect:/events";
-
-
     }
+
 
     @GetMapping("/event")
     public String showEvent (Model model, @RequestParam Long id) {

@@ -1,6 +1,5 @@
 package com.events.events.models;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,12 +10,39 @@ public class EventImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     private Events event;
 
     @Column(name = "image_file_name", columnDefinition = "TEXT")
     private String imageFileName;
 
-    // Constructors, getters, and setters
+    // Constructors
+    public EventImage() {
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Events getEvent() {
+        return event;
+    }
+
+    public void setEvent(Events event) {
+        this.event = event;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
 }

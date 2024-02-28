@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/navbar :: navbar"></div>
+<span th:replace="~{fragments/navbar.html :: navbar}"></span>
 
 <div class="flex items-center justify-center">
 
@@ -33,16 +33,21 @@
         <div id="titleContainer" class="w-[50%] h-[100px]">
             <h1 id="title" class="w-full font-semibold" style="word-break: break-all; word-wrap: break-word;"></h1>
         </div>
-        <div class="grid grid-cols-5 gap-8">
+        <div class="grid md:grid-cols-5 gap-8 grid-cols-1">
             <div class="col-span-2">
                 <p  th:text="${event.description}" class="text-justify lg:text-[1.7rem]"> </p>
             </div>
-            <div class="col-span-3">
-                <img th:src="@{'/images/'+${event.imageFileName}}"
-                     width=""/>
+            <div class="md:col-span-3">
+                <main class='gallery'>
+                    <div class='item bg-black' th:each="image, index : ${event.images}" th:data-pos="${index.index}">
+                        <img class="object-cover" th:src="@{'/images/' + ${image.imageFileName}}" />
+                    </div>
+                </main>
+<!--                <img th:if="${event.images != null and event  .images.size() > 0}" th:src="@{'/images/' + ${event.images[0].imageFileName}}" />-->
+
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-8 mt-8">
+        <div class="grid md:grid-cols-2 gap-8 mt-8 grid-cols-1">
             <div class=" flex flex-row items-center justify-center gap-10">
                 <img src="https://www.svgrepo.com/show/35457/calendar-symbol.svg" width="50px"/>
                 <div class="flex gap-3 justify-center items-center">
@@ -75,7 +80,11 @@
             </div>
         </div>
 
+
+
+
     </article>
+
 </div>
 
 <!--<img th:src="@{'/images/'+${event.imageFileName}}" />-->
@@ -90,7 +99,7 @@
 <!--<p th:text="${event.endDate}"></p>-->
 <!--<p th:text="${event.startDate}"></p>-->
 <!--<p th:text="${event.price}"></p>-->
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer.html :: footer}"></div>
 </body>
 
 <script  th:inline="javascript">
@@ -116,5 +125,14 @@
 
      processInput();
      /*]]>*/
+
+    function init(e) {
+  if (!e.target.closest('.item')) return;
+  let hero = document.querySelector('div[data-pos="0"]');
+  let target = e.target.parentElement;
+  [target.dataset.pos,hero.dataset.pos] = [hero.dataset.pos,target.dataset.pos];
+}
+
+window.addEventListener('click',init,false);
 </script>
 </html>

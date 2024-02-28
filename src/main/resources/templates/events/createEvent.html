@@ -156,10 +156,12 @@
             <div class="upload__box">
                 <div class="upload__btn-box mb-4">
                     <label for="upload" class="upload__btn inline-block font-semibold text-white bg-gray-700 border-2 border-gray-700 rounded-md px-4 py-2 transition-all duration-300 cursor-pointer hover:bg-transparent hover:text-gray-700">Subir imagenes</label>
-                    <input id="upload" type="file" multiple class="upload__inputfile hidden">
+                    <input th:field=${eventDto.imageFiles} id="upload" type="file" multiple class="upload__inputfile hidden">
                 </div>
                 <div class="upload__img-wrap flex flex-wrap -mx-4"></div>
             </div>
+                        <p th:if="${#fields.hasErrors('imageFiles')}" th:errors="${eventDto.imageFiles}" class="text-red-500 text-xs italic"></p>
+
         </div>
 
 

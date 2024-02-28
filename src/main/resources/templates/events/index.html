@@ -46,7 +46,7 @@
     <article th:each="events: ${events}">
         <div class="article-wrapper">
             <figure>
-                <img th:src="@{'/images/'+${events.imageFileName}}"/>
+                <img th:if="${events.images != null and events.images.size() > 0}" th:src="@{'/images/' + ${events.images[0].imageFileName}}" />
             </figure>
             <div class="article-body">
                 <h2 th:text="${events.title}"></h2>
