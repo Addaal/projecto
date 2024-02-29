@@ -84,7 +84,7 @@
                         Departamento
                     </label>
                     <div class="relative">
-                        <select th:field=${eventDto.department} value="Concepcion" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                        <select th:field=${eventDto.department} value="Central" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                             <option value="Concepción">Concepción</option>
                             <option value="San Pedro">San Pedro</option>
                             <option value="Cordillera">Cordillera</option>
@@ -117,7 +117,7 @@
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priceId">
                         Precio
                     </label>
-                    <input th:field=${eventDto.price} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priceId" type="number" value="0" placeholder="Precio">
+                    <input th:field=${eventDto.price} step="1" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priceId" type="number" value="0" placeholder="Precio">
                 </div>
 
 
@@ -149,82 +149,92 @@
             </div>
         </div>
 
-        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!imagen previamente NO ELIMINAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-        <!--        <div class="flex flex-col px-3 gap-2 mb-6">-->
-        <!--            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priceId">-->
-        <!--                Subir imagen-->
-        <!--            </label>-->
-
-
-
-        <!--            <input th:field=${eventDto.imageFileName} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" aria-describedby="file_input_help" id="file_input" type="file">-->
-        <!--            <p th:if="${#fields.hasErrors('imageFileName')}" th:errors="${eventDto.imageFileName}" class="text-red-500 text-xs italic"></p>-->
-        <!--        </div>-->
-
 
         <div class="flex flex-col px-3 gap-2 mb-6">
             <div class="upload__box">
                 <div class="upload__btn-box mb-4">
-                    <label for="upload" class="upload__btn inline-block font-semibold text-white bg-gray-700 border-2 border-gray-700 rounded-md px-4 py-2 transition-all duration-300 cursor-pointer hover:bg-transparent hover:text-gray-700">Subir imagenes</label>
+                    <label for="upload" class="upload__btn cool-link hover:cursor-pointer">Subir imagenes <span><img class="inline-block"
+                                                                                                                     src="https://www.svgrepo.com/show/5154/hand-pointer.svg" width="20"/></span></label>
                     <input th:field=${eventDto.imageFiles} id="upload" type="file" multiple class="upload__inputfile hidden">
                 </div>
                 <div class="upload__img-wrap flex flex-wrap -mx-4"></div>
             </div>
             <p th:if="${#fields.hasErrors('imageFiles')}" th:errors="${eventDto.imageFiles}" class="text-red-500 text-xs italic"></p>
+            <p id="imagenes_advertencia" class="text-[10px] text-grey-300">*Si no subes ninguna imagen, se mantendran las imagenes previamente subidas.</p>
 
         </div>
 
 
         <!--        submit button-->
         <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-            <button type="submit" class="rounded-md bg-greentitles px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+            <button type="button" onclick="window.location.href='/events'" class="cool-link">Cancel</button>
+            <button type="submit" class="cool-link">Save</button>
         </div>
     </form>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 <script>
-    $(document).ready(function () {
-    ImgUpload();
-  });
 
-  function ImgUpload() {
-    var imgWrap = $(".upload__img-wrap");
-    var imgArray = [];
 
-    $('#upload').on('change', function (e) {
-      var maxLength = $(this).data('max_length');
-      var files = e.target.files;
+       $(document).ready(function () {
+       presetImages();
+       ImgUpload();
+     });
 
-      $.each(files, function (index, f) {
-        if (!f.type.match('image.*')) {
-          return;
-        }
+     function ImgUpload() {
+       var imgWrap = $(".upload__img-wrap");
+       var imgArray = [];
 
-        if (imgArray.length >= maxLength) {
-          return false;
-        } else {
-          imgArray.push(f);
+       $('#upload').on('change', function (e) {
+         var maxLength = $(this).data('max_length');
+         var files = e.target.files;
+        $('#imagenes_advertencia').hide();
+         $.each(files, function (index, f) {
+           if (!f.type.match('image.*')) {
+             return;
+           }
 
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var html = "<div class='upload__img-box w-48 h-48 bg-cover bg-center bg-no-repeat relative mr-4 mb-4' style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "'><div class='upload__img-close w-6 h-6 bg-white bg-opacity-50 rounded-full flex items-center justify-center absolute top-2 right-2 cursor-pointer'>×</div></div>";
-            imgWrap.append(html);
-          }
-          reader.readAsDataURL(f);
-        }
-      });
-    });
+           if (imgArray.length >= maxLength) {
+             return false;
+           } else {
+             imgArray.push(f);
 
-    $('body').on('click', ".upload__img-close", function () {
-      var file = $(this).parent().data("file");
-      imgArray = imgArray.filter(function (item) {
-        return item.name !== file;
-      });
-      $(this).parent().remove();
-    });
-  }
+             var reader = new FileReader();
+             reader.onload = function (e) {
+               var html = "<div class='upload__img-box w-48 h-48 bg-cover bg-center bg-no-repeat relative mr-4 mb-4' style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "'><div class='upload__img-close w-6 h-6 bg-white bg-opacity-50 rounded-full flex items-center justify-center absolute top-2 right-2 cursor-pointer'>×</div></div>";
+               imgWrap.append(html);
+             }
+             reader.readAsDataURL(f);
+           }
+         });
+       });
+
+       $('body').on('click', ".upload__img-close", function () {
+         var file = $(this).parent().data("file");
+         imgArray = imgArray.filter(function (item) {
+           return item.name !== file;
+         });
+         $(this).parent().remove();
+       });
+     }
+
+       function presetImages() {
+       var imgArray = [];
+         /*<![CDATA[*/
+    var currentImageUrls = /*[[${currentImageUrls}]]*/ [];
+    /*]]>*/
+       console.log(currentImageUrls);
+       $.each(currentImageUrls, function (index, url) {
+           var filename = url.substring(url.lastIndexOf('/') + 1);
+           var imgFile = new File([""], filename, { type: "image/jpeg" });
+           imgArray.push(imgFile);
+
+           var imgWrap = $(".upload__img-wrap");
+           var html = "<div class='upload__img-box w-48 h-48 bg-cover bg-center bg-no-repeat relative mr-4 mb-4' style='background-image: url(" + url + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + filename + "'><div class='upload__img-close w-6 h-6 bg-white bg-opacity-50 rounded-full flex items-center justify-center absolute top-2 right-2 cursor-pointer'>×</div></div>";
+           imgWrap.append(html);
+       });
+    }
 
 </script>
 </html>

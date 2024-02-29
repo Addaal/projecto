@@ -139,24 +139,14 @@
             </div>
         </div>
 
-<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!imagen previamente NO ELIMINAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-<!--        <div class="flex flex-col px-3 gap-2 mb-6">-->
-<!--            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priceId">-->
-<!--                Subir imagen-->
-<!--            </label>-->
-
-
-
-<!--            <input th:field=${eventDto.imageFileName} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" aria-describedby="file_input_help" id="file_input" type="file">-->
-<!--            <p th:if="${#fields.hasErrors('imageFileName')}" th:errors="${eventDto.imageFileName}" class="text-red-500 text-xs italic"></p>-->
-<!--        </div>-->
 
 
         <div class="flex flex-col px-3 gap-2 mb-6">
             <div class="upload__box">
                 <div class="upload__btn-box mb-4">
-                    <label for="upload" class="upload__btn inline-block font-semibold text-white bg-gray-700 border-2 border-gray-700 rounded-md px-4 py-2 transition-all duration-300 cursor-pointer hover:bg-transparent hover:text-gray-700">Subir imagenes</label>
-                    <input th:field=${eventDto.imageFiles} id="upload" type="file" multiple class="upload__inputfile hidden">
+                    <label for="upload" class="upload__btn cool-link hover:cursor-pointer">Subir imagenes <span><img class="inline-block"
+                                                                                                                     src="https://www.svgrepo.com/show/5154/hand-pointer.svg" width="20"/></span></label>
+                    <input th:field=${eventDto.imageFiles} id="upload" type="file" multiple class="upload__inputfile  hidden">
                 </div>
                 <div class="upload__img-wrap flex flex-wrap -mx-4"></div>
             </div>
@@ -167,8 +157,8 @@
 
         <!--        submit button-->
         <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-            <button type="submit" class="rounded-md bg-greentitles px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+            <button type="button" onclick="window.location.href='/events'" class="cool-link">Cancel</button>
+            <button type="submit" class="cool-link">Save</button>
         </div>
     </form>
 </div>

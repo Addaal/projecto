@@ -1,6 +1,9 @@
 package com.events.events.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +33,7 @@ public class Events {
     private Date endDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<EventImage> images;
 
     // Constructors

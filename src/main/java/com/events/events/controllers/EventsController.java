@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/events")
@@ -201,6 +202,15 @@ public class EventsController {
             Events event = repo.findById(id).get();
             model.addAttribute("event", event);
 
+//            List<String> currentImageUrls = event.getImages().stream()
+//                    .map(image -> "/images/" + image.getImageFileName()) // Adjust this path based on your actual folder structure
+//                    .collect(Collectors.toList());
+//            model.addAttribute("currentImageUrls", currentImageUrls);
+
+//            for(String url : currentImageUrls){
+//                System.out.println(url);
+//            }
+
             EventDto eventDto = new EventDto();
             eventDto.setTitle(event.getTitle());
             eventDto.setDescription(event.getDescription());
@@ -229,55 +239,65 @@ public class EventsController {
         try{
             Events event = repo.findById(id).get();
             model.addAttribute("event", event);
+            List<EventImage> newImages = new ArrayList<>();
+            System.out.println("current images" + eventDto.getImageFiles());
+            System.out.println("current images2" + eventDto.getImageFiles().size());
 
-            if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
-                result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
+            if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty() || eventDto.getImageFiles().stream().allMatch(file -> file.isEmpty())) {
+                System.out.println("no new images found");
             } else if (eventDto.getImageFiles().size() > 5) {
                 result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
             }
+            else if(eventDto.getImageFiles().size() > 0){
+                System.out.println("this is running");
+                List<EventImage> oldImages = event.getImages();
+                System.out.println(oldImages.size());
+
+                for (EventImage image : oldImages) {
+                    // Delete the image file from the file system
+                    String filePath = "public/images/" + image.getImageFileName();
+                    Files.deleteIfExists(Paths.get(filePath));
+                    image.setEvent(null);
+                }
+                event.getImages().clear();
+                //save new pictures
+
+                Date createdAt = new Date();
+                for (MultipartFile file : eventDto.getImageFiles()) {
+                    if (!file.isEmpty()) {
+                        try {
+                            String uploadDir = "public/images/";
+                            String storageFileName = createdAt.getTime() + "-" + file.getOriginalFilename();
+                            Path uploadPath = Paths.get(uploadDir);
+
+                            if (!Files.exists(uploadPath)) {
+                                Files.createDirectories(uploadPath);
+                            }
+
+                            try (InputStream inputStream = file.getInputStream()) {
+                                Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
+                            }
+
+
+                            EventImage eventImage = new EventImage();
+                            eventImage.setEvent(event);
+                            eventImage.setImageFileName(storageFileName);
+                            newImages.add(eventImage);
+
+
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            // Handle exception
+                        }
+                    }
+                }
+
+            }
+
             if (result.hasErrors()) {
                 return "events/createEvent";
             }
             //delete old pictures
-            List<EventImage> oldImages = event.getImages();
-            System.out.println(oldImages.size());
-
-            for (EventImage image : oldImages) {
-                // Delete the image file from the file system
-                String filePath = "public/images/" + image.getImageFileName();
-                Files.deleteIfExists(Paths.get(filePath));
-                image.setEvent(null);
-            }
-            event.getImages().clear();
-            //save new pictures
-            List<EventImage> newImages = new ArrayList<>();
-            Date createdAt = new Date();
-            for (MultipartFile file : eventDto.getImageFiles()) {
-                if (!file.isEmpty()) {
-                    try {
-                        String uploadDir = "public/images/";
-                        String storageFileName = createdAt.getTime() + "-" + file.getOriginalFilename();
-                        Path uploadPath = Paths.get(uploadDir);
-
-                        if (!Files.exists(uploadPath)) {
-                            Files.createDirectories(uploadPath);
-                        }
-
-                        try (InputStream inputStream = file.getInputStream()) {
-                            Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
-                        }
-
-                        EventImage eventImage = new EventImage();
-                        eventImage.setEvent(event);
-                        eventImage.setImageFileName(storageFileName);
-                        newImages.add(eventImage);
-
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        // Handle exception
-                    }
-                }
-            }
 
             event.setTitle(eventDto.getTitle());
             event.setDescription(eventDto.getDescription());
@@ -286,7 +306,10 @@ public class EventsController {
             event.setPrice(eventDto.getPrice());
             event.setStartDate(eventDto.getStartDate());
             event.setEndDate(eventDto.getEndDate());
-            event.setImages(newImages);
+
+            if(newImages.size() > 0) {
+                event.setImages(newImages);
+            }
             repo.save(event);
 
         }catch (Exception e ){

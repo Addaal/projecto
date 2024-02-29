@@ -10,7 +10,8 @@
             extend: {
               colors: {
                 clifford: '#da373d',
-                  greentitles: ' #28666e'
+                  greentitles: '#28666e',
+                  darkColorgreen: '#223133'
               }
             }
           }
@@ -41,15 +42,16 @@
             <img th:src="@{../images/basurero.svg}" alt="logo" width="55" />
         </div>
         </a>
-
+<!--contenido-->
         <div id="titleContainer" class="w-[50%] h-[100px]">
             <h1 id="title" class="w-full font-semibold" style="word-break: break-all; word-wrap: break-word;"></h1>
         </div>
-        <div class="grid md:grid-cols-5 gap-8 grid-cols-1">
-            <div class="col-span-2">
+        <div class="bg-greentitles "></div>
+        <div class="grid 2xl:grid-cols-5 gap-8 grid-cols-1  ">
+            <div class="2xl:col-span-2">
                 <p  th:text="${event.description}" class="text-justify lg:text-[1.7rem]"> </p>
             </div>
-            <div class="md:col-span-3">
+            <div class="2xl:col-span-3 flex items-center justify-center">
                 <main class='gallery'>
                     <div class='item bg-black' th:each="image, index : ${event.images}" th:data-pos="${index.index}">
                         <img class="object-cover" th:src="@{'/images/' + ${image.imageFileName}}" />
@@ -59,8 +61,8 @@
 
             </div>
         </div>
-        <div class="grid md:grid-cols-2 gap-8 mt-8 grid-cols-1">
-            <div class=" flex flex-row items-center justify-center gap-10">
+        <div class="grid lg:grid-cols-2 gap-8 mt-8 grid-cols-1 rounded-[25px] ">
+            <div class=" flex flex-row items-center  gap-10">
                 <img src="https://www.svgrepo.com/show/35457/calendar-symbol.svg" width="50px"/>
                 <div class="flex gap-3 justify-center items-center">
                 <div class="flex flex-col gap-2 justify-center items-center">
@@ -69,14 +71,14 @@
                     <span class="bg-black w-[50px] h-[3px] rounded"></span>
                 </div>
                <p class="text-[1.3rem] font-semibold">~</p>
-                <div class="flex flex-col gap-2 justify-center items-center">
+                <div class="flex flex-col gap-2  items-center">
                     <p class="text-[1.8rem]  date" th:text="${dayEnd}"></p>
                     <p class="text-[1.3rem]  date" th:text="${monthEnd}"></p>
                     <span class="bg-black w-[50px] h-[3px] rounded"></span>
                 </div>
                 </div>
             </div>
-            <div class="flex flex-row items-center justify-center gap-5">
+            <div class="flex flex-row items-center  gap-5">
                 <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" width="50px"/>
                 <div class="flex flex-col">
                     <p class="text-[1.3rem]  date" th:text="${event.city}"></p>
@@ -86,7 +88,7 @@
                    <p class="text-[1.3rem]  date" th:text="${event.department}"></p>
                 </div>
             </div>
-            <div class=" flex items-center justify-center  gap-5">
+            <div class=" flex items-center   gap-5">
             <img src="https://www.svgrepo.com/show/488339/price-tag-rotate.svg"  width="50px" />
             <p class="text-[2rem]  date" th:text="'Gs. '+${event.price}"></p>
             </div>
