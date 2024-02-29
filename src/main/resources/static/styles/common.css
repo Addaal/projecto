@@ -77,3 +77,26 @@ li {
     width: 100%;
     //transition: width .3s;
 }
+
+.cool-link-featured {
+    display: block;
+    color: white;
+    text-decoration: none;
+     font-weight: bold;
+
+
+}
+
+.cool-link-featured::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width .3s;
+}
+
+.cool-link-featured:hover::after {
+    width: 100%;
+    //transition: width .3s;
+}

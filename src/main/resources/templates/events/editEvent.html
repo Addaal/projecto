@@ -24,7 +24,7 @@
 
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="flex flex-col items-center py-5 gap-2 justify-center  w-full ">
     <h1 class="flex block uppercase text-lg text-gray-700  font-bold mb-2 ">Editar Evento</h1>
@@ -175,7 +175,7 @@
         </div>
     </form>
 </div>
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script>
 

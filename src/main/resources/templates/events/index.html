@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="flex items-center justify-center w-full p-5 bg-greentitles">
     <div class="flex flex-col w-[1200px]">
@@ -65,7 +65,7 @@
 
 
 </section>
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 <link th:href="@{../styles/common.css}" rel="stylesheet"/>
 </body>
 </html>
