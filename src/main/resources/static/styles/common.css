@@ -50,3 +50,30 @@ li {
     width: 100%;
     //transition: width .3s;
 }
+
+
+
+
+
+.cool-link-confirm {
+    display: inline-block;
+    color: red;
+    text-decoration: none;
+     font-weight: bold;
+
+
+}
+
+.cool-link-confirm::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: red;
+    transition: width .3s;
+}
+
+.cool-link-confirm:hover::after {
+    width: 100%;
+    //transition: width .3s;
+}
