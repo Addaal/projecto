@@ -56,21 +56,18 @@ public class EventsController {
             @Valid @ModelAttribute EventDto eventDto,
             BindingResult result) {
 
-//        if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
-//            result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
-//        } else if (eventDto.getImageFiles().size() > 5) {
-//            result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
-//        }
 
-        if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
+        if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty() || eventDto.getImageFiles().stream().allMatch(file -> file.isEmpty())) {
             result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
         } else if (eventDto.getImageFiles().size() > 5) {
             result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
-        } else {
+        } else  {
             for (MultipartFile imageFile : eventDto.getImageFiles()) {
-                if (imageFile.getSize() > 1 * 1024 * 1024) { // Check if image size is greater than 1MB
-                    result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 1MB"));
-                    break; // Stop further processing as one image has exceeded the limit
+                System.out.println("size" + imageFile.getSize());
+                if (imageFile.getSize() > 1 * 800  * 1024) {
+
+                    result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 8kB"));
+
                 }
             }
         }
@@ -256,12 +253,13 @@ public class EventsController {
             System.out.println("current images" + eventDto.getImageFiles());
             System.out.println("current images2" + eventDto.getImageFiles().size());
 
+
+
             if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty() || eventDto.getImageFiles().stream().allMatch(file -> file.isEmpty())) {
                 System.out.println("no new images found");
             } else if (eventDto.getImageFiles().size() > 5) {
                 result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
-            }
-            else if(eventDto.getImageFiles().size() > 0){
+            } else if (eventDto.getImageFiles().size() > 0) {
                 System.out.println("this is running");
                 List<EventImage> oldImages = event.getImages();
                 System.out.println(oldImages.size());
@@ -279,6 +277,12 @@ public class EventsController {
                 for (MultipartFile file : eventDto.getImageFiles()) {
                     if (!file.isEmpty()) {
                         try {
+                            // Check image size
+                            if (file.getSize() > 800 * 1024) {
+                                result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 800KB"));
+                                break; // Stop processing further images
+                            }
+
                             String uploadDir = "public/images/";
                             String storageFileName = createdAt.getTime() + "-" + file.getOriginalFilename();
                             Path uploadPath = Paths.get(uploadDir);
@@ -291,12 +295,10 @@ public class EventsController {
                                 Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
                             }
 
-
                             EventImage eventImage = new EventImage();
                             eventImage.setEvent(event);
                             eventImage.setImageFileName(storageFileName);
                             newImages.add(eventImage);
-
 
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
@@ -304,13 +306,17 @@ public class EventsController {
                         }
                     }
                 }
-
             }
+
+
 
             if (result.hasErrors()) {
                 return "events/createEvent";
             }
-            //delete old pictures
+
+
+
+
 
             event.setTitle(eventDto.getTitle());
             event.setDescription(eventDto.getDescription());

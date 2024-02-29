@@ -31,7 +31,7 @@ public class EventDto {
     @NotNull(message = "Start date required")
     @DateTimeFormat(pattern = "yyyy-MM-dd") // Specify the date format here
     private Date startDate;
-
+    @NotNull(message = "End date required")
     @DateTimeFormat(pattern = "yyyy-MM-dd") // Specify the date format here
     private Date endDate;
 

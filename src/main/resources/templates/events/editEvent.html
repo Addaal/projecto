@@ -141,6 +141,7 @@
                         Fecha de Finalizacion
                     </label>
                     <input  th:field=${eventDto.endDate} class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="endDate" type="date" pattern="\d{2}-\d{2}-\d{4}" name="endDate" >
+                    <p th:if="${#fields.hasErrors('endDate')}" th:errors="${eventDto.endDate}" class="text-red-500 text-xs italic"></p>
 
 
                 </div>
