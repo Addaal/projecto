@@ -56,10 +56,23 @@ public class EventsController {
             @Valid @ModelAttribute EventDto eventDto,
             BindingResult result) {
 
+//        if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
+//            result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
+//        } else if (eventDto.getImageFiles().size() > 5) {
+//            result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
+//        }
+
         if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty()) {
             result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
         } else if (eventDto.getImageFiles().size() > 5) {
             result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
+        } else {
+            for (MultipartFile imageFile : eventDto.getImageFiles()) {
+                if (imageFile.getSize() > 1 * 1024 * 1024) { // Check if image size is greater than 1MB
+                    result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 1MB"));
+                    break; // Stop further processing as one image has exceeded the limit
+                }
+            }
         }
 
 
