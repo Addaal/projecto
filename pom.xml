@@ -14,9 +14,7 @@
 	<name>events</name>
 	<description>Paraguay events</description>
 	<properties>
-		<java.runtime.version>21</java.runtime.version>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
+		<java.runtime.version>11</java.runtime.version>
 	</properties>
 	<dependencies>
 		<dependency>
