@@ -60,13 +60,13 @@ public class EventsController {
         if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty() || eventDto.getImageFiles().stream().allMatch(file -> file.isEmpty())) {
             result.addError(new FieldError("eventDto", "imageFiles", "Missing Images"));
         } else if (eventDto.getImageFiles().size() > 5) {
-            result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
+            result.addError(new FieldError("eventDto", "imageFiles", "Solo hasta 5 imagenes"));
         } else  {
             for (MultipartFile imageFile : eventDto.getImageFiles()) {
                 System.out.println("size" + imageFile.getSize());
-                if (imageFile.getSize() > 1 * 800  * 1024) {
+                if (imageFile.getSize() > 1 * 4000 * 1024) {
 
-                    result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 8kB"));
+                    result.addError(new FieldError("eventDto", "imageFiles", "Las imagenes deben ser hasta 4MB"));
 
                 }
             }
@@ -258,7 +258,7 @@ public class EventsController {
             if (eventDto.getImageFiles() == null || eventDto.getImageFiles().isEmpty() || eventDto.getImageFiles().stream().allMatch(file -> file.isEmpty())) {
                 System.out.println("no new images found");
             } else if (eventDto.getImageFiles().size() > 5) {
-                result.addError(new FieldError("eventDto", "imageFiles", "Only a maximum of 5 images are allowed"));
+                result.addError(new FieldError("eventDto", "imageFiles", "Solo hasta 5 imagenes"));
             } else if (eventDto.getImageFiles().size() > 0) {
                 System.out.println("this is running");
                 List<EventImage> oldImages = event.getImages();
@@ -278,8 +278,8 @@ public class EventsController {
                     if (!file.isEmpty()) {
                         try {
                             // Check image size
-                            if (file.getSize() > 800 * 1024) {
-                                result.addError(new FieldError("eventDto", "imageFiles", "Image size should be less than 800KB"));
+                            if (file.getSize() > 4000 * 1024) {
+                                result.addError(new FieldError("eventDto", "imageFiles", "Las imagenes deben ser hasta 4MB"));
                                 break; // Stop processing further images
                             }
 
