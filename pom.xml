@@ -81,10 +81,10 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					<release>21</release> <!-- Specify the Java version you're targeting -->
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
+
 
 
 		</plugins>
