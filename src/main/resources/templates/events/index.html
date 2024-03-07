@@ -17,6 +17,7 @@
           }
         }
     </script>
+    <link th:href="@{../styles/common.css}" rel="stylesheet"/>
     <link th:href="@{../styles/indexStyle.css}" rel="stylesheet"/>
 
 
@@ -42,7 +43,9 @@
         Destacados
     </label>
 </div>
-<section class="articles p-5">
+<div class="w-100 flex items-center justify-center">
+<!--<section class="grid grid-cols-1 2xl:grid-cols-3 max-w-[1200px] gap-3 items-center p-5">-->
+<section class="articles">
     <article th:each="events: ${events}">
         <div class="article-wrapper">
             <figure>
@@ -65,7 +68,7 @@
 
 
 </section>
-<div th:replace="~{fragments/footer :: footer}"></div>
-<link th:href="@{../styles/common.css}" rel="stylesheet"/>
+</div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
