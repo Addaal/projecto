@@ -86,7 +86,9 @@ public class EventsRestController {
 class FilteredEvent {
 
     private Long id;
+
     private String title;
+
     private String description;
     private String city;
     private String department;
